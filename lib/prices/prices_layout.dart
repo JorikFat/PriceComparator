@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:price_comparator/core.dart';
 import 'package:price_comparator/prices/add/price_add_dialog.dart';
 import 'package:price_comparator/prices/delete/price_delete_dialog.dart';
 import 'package:price_comparator/prices/price_controller.dart';
-import 'package:price_comparator/prices/price_viewmodel.dart';
 
 class PricesLayout extends StatelessWidget {
   const PricesLayout({super.key});
@@ -57,14 +54,11 @@ class PriceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        customBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        borderRadius: BorderRadius.circular(12),
         onLongPress: () async {
-          log('long');
           final controller = context.read<PriceController>();
           final values = await PriceDeleteDialog.show(context);
-          if(values == true) controller.delete(price);
+          if (values == true) controller.delete(price);
         },
         child: Padding(
           padding: const EdgeInsets.all(8),
