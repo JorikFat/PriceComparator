@@ -28,11 +28,16 @@ class PriceAddDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextField(
+            focusNode: FocusNode()..requestFocus(),
+            textInputAction: TextInputAction.next,
             controller: count,
+            keyboardType: TextInputType.number,
             decoration: const InputDecoration(hintText: "Количество"),
           ),
           TextField(
             controller: price,
+            textInputAction: TextInputAction.done,
+            keyboardType: TextInputType.number,
             decoration: const InputDecoration(hintText: "Цена"),
           ),
         ],
@@ -47,7 +52,7 @@ class PriceAddDialog extends StatelessWidget {
           onPressed: () {
             final values = PriceValues(
               int.parse(count.text),
-              double.parse(price.text),
+              double.parse(price.text.replaceAll(',', '.')),
             );
             return Navigator.pop(context, values);
           },
