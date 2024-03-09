@@ -1,7 +1,7 @@
 name: price_comparator
 description: "Compare prices similar products"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 0.0.1+1
+version: 0.0.5+1
 
 environment:
   sdk: '>=3.2.4 <4.0.0'
