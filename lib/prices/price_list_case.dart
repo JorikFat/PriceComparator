@@ -5,7 +5,12 @@ class PriceListCase {
   int _lastId = 0;
   final List<Price> prices = [];
 
-  void addPrice(PriceValues values) {
+  void add(PriceValues values) {
     prices.add(Price(++_lastId, values.price, values.count));
+  }
+
+  void delete(int priceId) {
+    prices.removeWhere((it) => it.id == priceId);
+    _lastId = prices.isEmpty ? 0 : prices.last.id;
   }
 }

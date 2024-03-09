@@ -10,8 +10,13 @@ class PriceController extends Cubit<List<PriceViewModel>> {
   PriceController(this.domain)
       : super(domain.prices.convert((it) => PriceViewModel(it)));
 
-  void addPrice(PriceValues values) {
-    domain.addPrice(values);
+  void add(PriceValues values) {
+    domain.add(values);
+    _updateViewModels();
+  }
+
+  void delete(PriceViewModel price) {
+    domain.delete(price.id);
     _updateViewModels();
   }
 

@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:price_comparator/core.dart';
 import 'package:price_comparator/prices/add/price_add_dialog.dart';
+import 'package:price_comparator/prices/delete/price_delete_dialog.dart';
 import 'package:price_comparator/prices/price_controller.dart';
 import 'package:price_comparator/prices/price_viewmodel.dart';
 
@@ -23,7 +26,7 @@ class PricesLayout extends StatelessWidget {
         onPressed: () async {
           final controller = context.read<PriceController>();
           final values = await PriceAddDialog.show(context);
-          controller.addPrice(values);
+          controller.add(values);
         },
         child: const Icon(Icons.add),
       ),
@@ -53,15 +56,26 @@ class PriceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text('${price.count} шт'),
-            Text('${price.price} ₽'),
-            Text('${price.itemPrice.toStringAsFixed(2)} ₽/шт'),
-          ],
+      child: InkWell(
+        customBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        onLongPress: () async {
+          log('long');
+          final controller = context.read<PriceController>();
+          final values = await PriceDeleteDialog.show(context);
+          if(values == true) controller.delete(price);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text('${price.count} шт'),
+              Text('${price.price} ₽'),
+              Text('${price.itemPrice.toStringAsFixed(2)} ₽/шт'),
+            ],
+          ),
         ),
       ),
     );
