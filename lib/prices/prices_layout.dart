@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:price_comparator/core.dart';
-import 'package:price_comparator/prices/price.dart';
+import 'package:price_comparator/prices/add/price_add_dialog.dart';
+import 'package:price_comparator/prices/price_controller.dart';
 import 'package:price_comparator/prices/price_viewmodel.dart';
 
 class PricesLayout extends StatelessWidget {
@@ -15,9 +18,21 @@ class PricesLayout extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(32),
-        child: PriceWidget(
-          PriceViewModel(Price(1, 100, 10)),
+        child: BlocBuilder<PriceController, List<PriceViewModel>>(
+          bloc: GetIt.I.get<PriceController>(),
+          builder: (_, list) => ListView.separated(
+            itemCount: list.length,
+            separatorBuilder: (_, i) => const SizedBox(height: 4),
+            itemBuilder: (_, i) => PriceWidget(list[i]),
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final values = await PriceAddDialog.show(context);
+          GetIt.I.get<PriceController>().addPrice(values);
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -38,7 +53,7 @@ class PriceWidget extends StatelessWidget {
           children: [
             Text('${price.count} шт'),
             Text('${price.price} ₽'),
-            Text('${price.itemPrice} ₽/шт'),
+            Text('${price.itemPrice.toStringAsFixed(2)} ₽/шт'),
           ],
         ),
       ),
