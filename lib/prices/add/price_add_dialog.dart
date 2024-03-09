@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:price_comparator/prices/add/price_values.dart';
 
 class PriceAddDialog extends StatelessWidget {
-  PriceAddDialog({super.key});
+  final bool cancelable;
 
-  static Future<dynamic> show(BuildContext context) async {
-    return showDialog(context: context, builder: (_) => PriceAddDialog());
-  }
+  PriceAddDialog({this.cancelable = true, super.key});
+
+  static Future<dynamic> show(
+    BuildContext context, {
+    bool cancelable = true,
+  }) async =>
+      showDialog(
+        context: context,
+        barrierDismissible: cancelable,
+        builder: (_) => PriceAddDialog(cancelable: cancelable),
+      );
 
   final count = TextEditingController();
   final price = TextEditingController();
@@ -30,10 +38,11 @@ class PriceAddDialog extends StatelessWidget {
         ],
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text("Отмена"),
-        ),
+        if (cancelable)
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Отмена"),
+          ),
         TextButton(
           onPressed: () {
             final values = PriceValues(

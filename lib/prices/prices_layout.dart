@@ -36,13 +36,20 @@ class PricesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      BlocBuilder<PriceController, List<PriceViewModel>>(
-        builder: (_, list) => ListView.separated(
+      BlocBuilder<PriceController, List<PriceViewModel>>(builder: (_, list) {
+        if (list.isEmpty) {
+          Future(() async {
+            final controller = context.read<PriceController>();
+            final values = await PriceAddDialog.show(context, cancelable: false);
+            controller.add(values);
+          });
+        }
+        return ListView.separated(
           itemCount: list.length,
           separatorBuilder: (_, i) => const SizedBox(height: 4),
           itemBuilder: (_, i) => PriceWidget(list[i]),
-        ),
-      );
+        );
+      });
 }
 
 class PriceWidget extends StatelessWidget {
